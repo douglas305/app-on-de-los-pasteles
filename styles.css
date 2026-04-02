@@ -1,18 +1,23 @@
-/* --- NUEVO CÓDIGO PARA STYLES.CSS --- */
+/* --- NUEVO CÓDIGO PARA STYLES.CSS (Fondo Rojo + Letras Blancas + Animación) --- */
 
 :root {
-  --color-principal: #ff3333; /* Un rojo vibrante */
-  --color-resaltado: #ff6666; /* Un rojo más claro para efectos */
-  --fondo-oscuro: #0d1117;
-  --fondo-tarjeta: #161b22;
-  --borde-tarjeta: #30363d;
-  --texto-principal: #e6edf3;
-  --texto-secundario: #8b949e;
+  --color-principal: #ffffff; /* Letras blancas nítidas */
+  --color-secundario: #f8d7da; /* Un blanco rosáceo muy suave para descripciones */
+  --fondo-rojo: #cc0000; /* Un rojo intenso y profesional para el fondo */
+  --fondo-tarjeta: #b30000; /* Un rojo un poco más oscuro para diferenciar productos */
+  --borde-tarjeta: #a00000; /* Un borde rojo oscuro muy sutil */
+}
+
+/* --- ANIMACIÓN PARA EL TÍTULO (Efecto Pulso) --- */
+@keyframes pulso-texto {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); } /* Crece un poquito */
+  100% { transform: scale(1); }
 }
 
 body {
-  background-color: var(--fondo-oscuro);
-  color: var(--texto-principal);
+  background-color: var(--fondo-rojo); /* TODO EL FONDO ROJO */
+  color: var(--color-principal); /* LETRAS BLANCAS */
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 15px;
@@ -21,31 +26,32 @@ body {
 
 header {
   text-align: center;
-  padding: 20px 0;
+  padding: 25px 0;
   margin-bottom: 25px;
-  border-bottom: 2px solid var(--color-principal);
-  box-shadow: 0 4px 15px rgba(255, 51, 51, 0.3); /* Brillo rojo en el header */
+  border-bottom: 2px solid #fff; /* Línea blanca abajo */
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2); /* Sutil brillo blanco */
 }
 
-.neon-text {
-  color: #fff;
-  text-shadow: 
-    0 0 7px #fff,
-    0 0 10px #fff,
-    0 0 21px var(--color-principal),
-    0 0 42px var(--color-principal),
-    0 0 82px var(--color-principal);
+/* --- ESTILO DEL TÍTULO SIN NEON Y CON MOVIMIENTO --- */
+header h1 {
+  color: #ffffff; /* Blanco nítido */
   font-weight: bold;
+  font-size: 2.2em;
+  margin: 0;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Sombra suave para nítidez */
+  
+  /* APLICAR LA ANIMACIÓN AQUÍ */
+  animation-name: pulso-texto;
+  animation-duration: 2s; /* Duración de cada ciclo (2 segundos) */
+  animation-iteration-count: infinite; /* Repetir para siempre */
+  animation-timing-function: ease-in-out; /* Movimiento suave */
+  display: inline-block; /* Necesario para que la animación de escala funcione bien */
 }
 
-.neon-text-blue {
-  color: #fff;
-  text-shadow: 
-    0 0 7px #fff,
-    0 0 10px #fff,
-    0 0 21px #00d4ff,
-    0 0 42px #00d4ff;
-  font-weight: bold;
+header p {
+  color: #fff; /* Letras blancas para el subtítulo */
+  margin-top: 5px;
+  font-size: 1em;
 }
 
 #menu-container {
@@ -54,87 +60,91 @@ header {
 }
 
 .producto-card {
-  background: var(--fondo-tarjeta);
+  background: var(--fondo-tarjeta); /* Fondo rojo un poco más oscuro */
   border: 1px solid var(--borde-tarjeta);
   border-radius: 15px;
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 10px rgba(255, 51, 51, 0.15); /* Sutil brillo rojo */
-}
-
-.producto-card:active {
-  transform: scale(0.98);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra oscura para dar relieve */
 }
 
 .info-prod h3 { 
   margin: 0; 
-  color: var(--color-resaltado); /* Títulos en rojo claro */
-  font-size: 1.2em;
+  color: #ffffff; /* Nombres de productos en blanco */
+  font-size: 1.25em;
+  font-weight: bold;
 }
 
 .info-prod p { 
   margin: 5px 0; 
   font-size: 0.95em; 
-  color: var(--texto-secundario); 
+  color: var(--color-secundario); /* Descripciones en blanco suave */
 }
 
 .info-prod strong {
   display: block;
-  font-size: 1.2em;
-  color: var(--texto-principal);
+  font-size: 1.3em;
+  color: #ffffff; /* Precios en blanco nítido */
   margin-top: 5px;
+  font-weight: bold;
 }
 
 .btn-add {
-  background-color: var(--color-principal);
-  color: white;
+  background-color: #ffffff; /* BOTÓN BLANCO */
+  color: var(--fondo-rojo); /* SÍMBOLO '+' EN ROJO */
   border: none;
   padding: 12px 18px;
   border-radius: 10px;
-  font-size: 1.1em;
+  font-size: 1.2em;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(255, 51, 51, 0.5); /* Botón con brillo */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn-add:active {
-  background-color: #cc0000;
+  background-color: #f0f0f0;
 }
 
 #carrito-seccion {
-  background: var(--fondo-tarjeta);
-  border: 1px solid var(--borde-tarjeta);
+  background: rgba(255, 255, 255, 0.1); /* Un fondo blanco muy transparente */
+  border: 1px solid #fff; /* Borde blanco nítido */
   border-radius: 15px;
   padding: 20px;
   margin-top: 30px;
   margin-bottom: 20px;
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); /* Brillo cian para el carrito */
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); /* Brillo blanco */
+}
+
+#carrito-seccion h2 {
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0;
 }
 
 .total-contenedor {
   display: flex;
   justify-content: space-between;
-  font-size: 1.2em;
+  font-size: 1.3em;
   font-weight: bold;
   margin: 15px 0;
-  color: var(--texto-principal);
+  color: #ffffff;
 }
 
 .ubicacion-bloque {
-  background: #21262d;
+  background: rgba(255, 255, 255, 0.15); /* Más contraste para el bloque */
   padding: 15px;
   border-radius: 12px;
   margin: 20px 0;
   text-align: center;
-  border: 1px solid #444;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 #btn-geo {
-  background: #1f6feb;
-  color: white;
+  background: #ffffff; /* BOTÓN BLANCO */
+  color: #1f6feb; /* Texto en azul original */
   border: none;
   padding: 15px;
   border-radius: 10px;
@@ -142,16 +152,17 @@ header {
   font-size: 1.1em;
   font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #status-geo {
   margin-top: 10px;
-  font-size: 0.9em;
-  color: var(--texto-secundario);
+  font-size: 0.95em;
+  color: #ffffff; /* Texto blanco */
 }
 
 #btn-enviar {
-  background: #238636; /* Verde WhatsApp */
+  background: #238636; /* Verde WhatsApp (lo mantenemos para reconocimiento) */
   color: white;
   border: none;
   padding: 18px;
@@ -160,7 +171,7 @@ header {
   font-size: 1.2em;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 0 15px rgba(35, 134, 54, 0.6); /* Brillo verde WhatsApp */
+  box-shadow: 0 6px 15px rgba(35, 134, 54, 0.5); /* Brillo verde */
 }
 
 #btn-enviar:active {
