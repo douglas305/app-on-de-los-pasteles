@@ -1,57 +1,74 @@
 const productos = [
-  { "id": 1, "nombre": "Empanada Gigante", "precio": 1500 },
-  { "id": 2, "nombre": "Vigorón Mixto", "precio": 2500 },
-  { "id": 3, "nombre": "Enyucado", "precio": 1200 },
-  { "id": 4, "nombre": "Refresco Natural", "precio": 1000 }
+    { id: 1, nombre: "Vigorón Mixto", precio: 2500, desc: "Yuca, chicharrón y ensalada" },
+    { id: 2, nombre: "Empanada Gigante", precio: 1500, desc: "Carne o Pollo" },
+    { id: 3, nombre: "Enyucado", precio: 1200, desc: "Sabor tradicional" }
 ];
 
 let carrito = [];
-let total = 0;
+let linkMapa = "";
 
-// Reemplaza estos números con los tuyos
-const numerosWhatsApp = ["50671571325", "50677777777"]; 
-
-function cargarMenu() {
+function mostrarMenu() {
     const contenedor = document.getElementById('menu-container');
-    if(!contenedor) return; // Seguridad
-    
-    contenedor.innerHTML = ""; // Limpiar antes de cargar
-    
     productos.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'producto';
-        div.innerHTML = `
-            <div>
-                <strong>${p.nombre}</strong><br>
-                ₡${p.precio}
-            </div>
-            <button onclick="agregarAlCarrito('${p.nombre}', ${p.precio})">Agregar</button>
-        `;
-        contenedor.appendChild(div);
+        contenedor.innerHTML += `
+            <div class="producto-card">
+                <div class="info-prod">
+                    <h3>${p.nombre}</h3>
+                    <p>${p.desc}</p>
+                    <strong>₡${p.precio}</strong>
+                </div>
+                <button class="btn-add" onclick="agregar(${p.id})">+</button>
+            </div>`;
     });
 }
 
-function agregarAlCarrito(nombre, precio) {
-    carrito.push({ nombre, precio });
-    total += precio;
-    document.getElementById('total-precio').textContent = total;
-    
+function agregar(id) {
+    const prod = productos.find(p => p.id === id);
+    carrito.push(prod);
+    actualizarCarrito();
+}
+
+function actualizarCarrito() {
     const lista = document.getElementById('lista-carrito');
-    const li = document.createElement('li');
-    li.textContent = `${nombre} - ₡${precio}`;
-    lista.appendChild(li);
+    const totalElemento = document.getElementById('total-precio');
+    lista.innerHTML = "";
+    let total = 0;
+
+    carrito.forEach((p, index) => {
+        total += p.precio;
+        lista.innerHTML += `<p>✅ ${p.nombre} - ₡${p.precio}</p>`;
+    });
+    totalElemento.innerText = `₡${total}`;
+}
+
+function obtenerUbicacion() {
+    const status = document.getElementById('status-geo');
+    if (!navigator.geolocation) {
+        status.innerText = "GPS no soportado";
+    } else {
+        status.innerText = "Localizando...";
+        navigator.geolocation.getCurrentPosition((pos) => {
+            linkMapa = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            status.innerText = "✅ Ubicación guardada";
+            document.getElementById('btn-geo').style.background = "#238636";
+        });
+    }
 }
 
 function enviarPedido() {
-    if (carrito.length === 0) return alert("Carrito vacío");
+    if (carrito.length === 0) return alert("Agrega productos primero");
     
-    let texto = "Pedido Onde los Pasteles:\n";
-    carrito.forEach(i => texto += `- ${i.nombre}\n`);
-    texto += `Total: ₡${total}`;
+    let mensaje = "🛍️ *Nuevo Pedido - Onde los Pasteles*\n\n";
+    carrito.forEach(p => mensaje += `- ${p.nombre} (₡${p.precio})\n`);
+    mensaje += `\n*Total: ${document.getElementById('total-precio').innerText}*`;
     
-    const num = numerosWhatsApp[Math.floor(Math.random() * numerosWhatsApp.length)];
-    window.open(`https://wa.me/${num}?text=${encodeURIComponent(texto)}`, '_blank');
+    if (linkMapa !== "") {
+        mensaje += `\n\n📍 *Ubicación de entrega:* ${linkMapa}`;
+    }
+
+    // CAMBIA EL NUMERO AQUÍ (Ejemplo: 50688888888)
+    const tel = "50671571325"; 
+    window.open(`https://wa.me/${tel}?text=${encodeURIComponent(mensaje)}`);
 }
 
-// ESTA LÍNEA ES LA QUE HACE QUE SE VEAN LOS PRODUCTOS:
-window.onload = cargarMenu;
+mostrarMenu();
