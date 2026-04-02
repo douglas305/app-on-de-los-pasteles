@@ -15,14 +15,10 @@ function mostrarMenu() {
     const contenedor = document.getElementById('menu-container');
     if(!contenedor) return;
     contenedor.innerHTML = "";
-
     const categorias = [...new Set(productos.map(p => p.categoria))];
-
     categorias.forEach(categoria => {
         contenedor.innerHTML += `<h2 class="titulo-categoria">${categoria}</h2>`;
-        const prods = productos.filter(p => p.categoria === categoria);
-        
-        prods.forEach(p => {
+        productos.filter(p => p.categoria === categoria).forEach(p => {
             contenedor.innerHTML += `
                 <div class="producto-card">
                     <div class="info-prod">
@@ -38,31 +34,27 @@ function mostrarMenu() {
 
 function agregar(id) {
     const prod = productos.find(p => p.id === id);
-    carrito.push({...prod}); // Agregamos una copia del producto
+    carrito.push({...prod});
     actualizarCarrito();
 }
 
-// ESTA FUNCIÓN ES LA QUE DIBUJA LA "X"
 function actualizarCarrito() {
     const lista = document.getElementById('lista-carrito');
     const totalElemento = document.getElementById('total-precio');
-    if(!lista || !totalElemento) return;
-    
     lista.innerHTML = "";
     let total = 0;
 
     carrito.forEach((p, index) => {
         total += p.precio;
         lista.innerHTML += `
-            <div class="item-carrito">
+            <div class="item-pedido">
                 <span>✅ ${p.nombre} - ₡${p.precio}</span>
-                <button class="btn-eliminar" onclick="eliminarProducto(${index})">✕</button>
+                <button class="btn-x" onclick="eliminarProducto(${index})">✕</button>
             </div>`;
     });
     totalElemento.innerText = `₡${total}`;
 }
 
-// LA FUNCIÓN PARA BORRAR LÍNEAS POR ERROR
 function eliminarProducto(index) {
     carrito.splice(index, 1);
     actualizarCarrito();
@@ -70,19 +62,14 @@ function eliminarProducto(index) {
 
 function obtenerUbicacion() {
     const status = document.getElementById('status-geo');
-    if (!navigator.geolocation) {
-        status.innerText = "GPS no soportado";
-    } else {
-        status.innerText = "Localizando...";
-        navigator.geolocation.getCurrentPosition((pos) => {
-            linkMapa = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            status.innerText = "✅ Ubicación guardada";
-            document.getElementById('btn-geo').style.background = "#238636";
-            document.getElementById('btn-geo').style.color = "white";
-        }, () => {
-            status.innerText = "❌ Error de GPS";
-        });
-    }
+    status.innerText = "Localizando...";
+    navigator.geolocation.getCurrentPosition((pos) => {
+        linkMapa = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+        status.innerText = "Ubicación Guardada ✅";
+        document.getElementById('btn-geo').style.background = "#e8f0fe";
+    }, () => {
+        status.innerText = "❌ Error de GPS";
+    });
 }
 
 function enviarPedido() {
@@ -90,10 +77,8 @@ function enviarPedido() {
     let mensaje = "🛍️ *Nuevo Pedido - Onde los Pasteles*\n\n";
     carrito.forEach(p => mensaje += `- ${p.nombre} (₡${p.precio})\n`);
     mensaje += `\n*Total: ${document.getElementById('total-precio').innerText}*`;
-    if (linkMapa !== "") mensaje += `\n\n📍 *Entrega:* ${linkMapa}`;
-
-    const tel = "50671571325"; 
-    window.open(`https://wa.me/${tel}?text=${encodeURIComponent(mensaje)}`);
+    if (linkMapa !== "") mensaje += `\n\n📍 *Ubicación:* ${linkMapa}`;
+    window.open(`https://wa.me/50671571325?text=${encodeURIComponent(mensaje)}`);
 }
 
 mostrarMenu();
