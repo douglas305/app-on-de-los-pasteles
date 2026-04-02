@@ -3,40 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onde los Pasteles - Orotina</title>
+    <title>Onde los Pasteles - Pedidos</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1 class="neon-text">Onde los Pasteles</h1>
-        <p>¡Sabor auténtico en Orotina!</p>
+
+    <header style="text-align: center; padding: 20px;">
+        <h1>Onde los Pasteles</h1>
+        <p>¡El sabor que te encanta!</p>
     </header>
 
-    <main>
-        <section id="menu-container">
-            </section>
+    <main id="menu-container"></main>
 
-        <section id="carrito-seccion">
-            <h2 class="neon-text-blue">Tu Pedido</h2>
+    <section class="carrito-flotante">
+        <div class="resumen-pedido">
+            <h2>Tu Pedido</h2>
+            
             <div id="lista-carrito"></div>
-            <div class="total-contenedor">
+
+            <hr>
+            <div class="fila-total">
                 <span>Total:</span>
                 <span id="total-precio">₡0</span>
             </div>
-            
-            <div class="ubicacion-bloque">
-                <button id="btn-geo" onclick="obtenerUbicacion()">
-                    <i class="fas fa-map-marker-alt"></i> Compartir mi Ubicación
-                </button>
-                <p id="status-geo">Requerido para entregas a domicilio</p>
-            </div>
 
-            <button id="btn-enviar" onclick="enviarPedido()">
-                <i class="fab fa-whatsapp"></i> Enviar Pedido por WhatsApp
-            </button>
-        </section>
-    </main>
+            <div class="acciones">
+                <button id="btn-geo" onclick="obtenerUbicacion()">
+                    <span id="status-geo">📍 Compartir mi Ubicación</span>
+                </button>
+                
+                <button class="btn-enviar" onclick="enviarPedido()">
+                    ✅ Enviar por WhatsApp
+                </button>
+            </div>
+        </div>
+    </section>
 
     <script src="app.js"></script>
 </body>
