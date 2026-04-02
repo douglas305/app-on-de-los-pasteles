@@ -1,71 +1,170 @@
+/* --- NUEVO CÓDIGO PARA STYLES.CSS --- */
+
+:root {
+  --color-principal: #ff3333; /* Un rojo vibrante */
+  --color-resaltado: #ff6666; /* Un rojo más claro para efectos */
+  --fondo-oscuro: #0d1117;
+  --fondo-tarjeta: #161b22;
+  --borde-tarjeta: #30363d;
+  --texto-principal: #e6edf3;
+  --texto-secundario: #8b949e;
+}
+
 body {
-    background-color: #0d1117;
-    color: #e6edf3;
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 15px;
+  background-color: var(--fondo-oscuro);
+  color: var(--texto-principal);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+header {
+  text-align: center;
+  padding: 20px 0;
+  margin-bottom: 25px;
+  border-bottom: 2px solid var(--color-principal);
+  box-shadow: 0 4px 15px rgba(255, 51, 51, 0.3); /* Brillo rojo en el header */
 }
 
 .neon-text {
-    color: #fff;
-    text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
-    text-align: center;
+  color: #fff;
+  text-shadow: 
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px var(--color-principal),
+    0 0 42px var(--color-principal),
+    0 0 82px var(--color-principal);
+  font-weight: bold;
 }
 
 .neon-text-blue {
-    color: #fff;
-    text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+  color: #fff;
+  text-shadow: 
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px #00d4ff,
+    0 0 42px #00d4ff;
+  font-weight: bold;
+}
+
+#menu-container {
+  display: grid;
+  gap: 15px;
 }
 
 .producto-card {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 15px;
-    padding: 15px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.15);
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde-tarjeta);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(255, 51, 51, 0.15); /* Sutil brillo rojo */
 }
 
-.info-prod h3 { margin: 0; color: #58a6ff; }
-.info-prod p { margin: 5px 0; font-size: 0.9em; color: #8b949e; }
+.producto-card:active {
+  transform: scale(0.98);
+}
+
+.info-prod h3 { 
+  margin: 0; 
+  color: var(--color-resaltado); /* Títulos en rojo claro */
+  font-size: 1.2em;
+}
+
+.info-prod p { 
+  margin: 5px 0; 
+  font-size: 0.95em; 
+  color: var(--texto-secundario); 
+}
+
+.info-prod strong {
+  display: block;
+  font-size: 1.2em;
+  color: var(--texto-principal);
+  margin-top: 5px;
+}
 
 .btn-add {
-    background: #8a2be2;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-weight: bold;
+  background-color: var(--color-principal);
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 51, 51, 0.5); /* Botón con brillo */
+}
+
+.btn-add:active {
+  background-color: #cc0000;
+}
+
+#carrito-seccion {
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde-tarjeta);
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); /* Brillo cian para el carrito */
+}
+
+.total-contenedor {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 15px 0;
+  color: var(--texto-principal);
 }
 
 .ubicacion-bloque {
-    background: #21262d;
-    padding: 15px;
-    border-radius: 12px;
-    margin: 20px 0;
-    text-align: center;
+  background: #21262d;
+  padding: 15px;
+  border-radius: 12px;
+  margin: 20px 0;
+  text-align: center;
+  border: 1px solid #444;
 }
 
 #btn-geo {
-    background: #1f6feb;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    width: 100%;
+  background: #1f6feb;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#status-geo {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: var(--texto-secundario);
 }
 
 #btn-enviar {
-    background: #238636;
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 12px;
-    width: 100%;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
+  background: #238636; /* Verde WhatsApp */
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 15px;
+  width: 100%;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(35, 134, 54, 0.6); /* Brillo verde WhatsApp */
 }
+
+#btn-enviar:active {
+  background-color: #1e6b2c;
+}
+
+/* --- FIN DEL CÓDIGO --- */
