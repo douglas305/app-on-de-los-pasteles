@@ -179,3 +179,25 @@ header p {
 }
 
 /* --- FIN DEL CÓDIGO --- */
+
+/* --- ESTILOS Y ANIMACIÓN PARA LAS CATEGORÍAS --- */
+@keyframes flotar-categoria {
+  0% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  100% { transform: translateX(-4px); }
+}
+
+.titulo-categoria {
+  color: #ffffff;
+  font-size: 1.8em;
+  text-transform: uppercase;
+  margin-top: 40px;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.4);
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+  text-align: left;
+  
+  /* Animación de movimiento */
+  animation: flotar-categoria 4s ease-in-out infinite;
+}
