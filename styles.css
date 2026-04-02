@@ -1,203 +1,84 @@
-/* --- NUEVO CÓDIGO PARA STYLES.CSS (Fondo Rojo + Letras Blancas + Animación) --- */
+const productos = [
+    { id: 1, categoria: "Pasteles", nombre: "Pastel de Pizza", precio: 1000, desc: "Sabor tradicional pizza" },
+    { id: 2, categoria: "Pasteles", nombre: "Pastel Nacho", precio: 1000, desc: "Sabor nacho especial" },
+    { id: 3, categoria: "Pasteles", nombre: "Pastel Arreglado", precio: 1500, desc: "Con ensalada y salsas" },
+    { id: 4, categoria: "Pasteles", nombre: "Pastel Papa con Carne", precio: 1000, desc: "Relleno tradicional" },
+    { id: 5, categoria: "Empanadas", nombre: "Empanada Papa con Carne", precio: 1000, desc: "Crujiente y calientita" },
+    { id: 29, categoria: "Promociones", nombre: "2x Empanadas", precio: 1500, desc: "Aplica en seleccionadas" },
+    { id: 30, categoria: "Promociones", nombre: "2x Pasteles", precio: 1500, desc: "Aplica en seleccionados" }
+];
 
-:root {
-  --color-principal: #ffffff; /* Letras blancas nítidas */
-  --color-secundario: #f8d7da; /* Un blanco rosáceo muy suave para descripciones */
-  --fondo-rojo: #cc0000; /* Un rojo intenso y profesional para el fondo */
-  --fondo-tarjeta: #b30000; /* Un rojo un poco más oscuro para diferenciar productos */
-  --borde-tarjeta: #a00000; /* Un borde rojo oscuro muy sutil */
+let carrito = [];
+let linkMapa = "";
+
+function mostrarMenu() {
+    const contenedor = document.getElementById('menu-container');
+    if(!contenedor) return;
+    contenedor.innerHTML = "";
+    const categorias = [...new Set(productos.map(p => p.categoria))];
+    categorias.forEach(categoria => {
+        contenedor.innerHTML += `<h2 class="titulo-categoria">${categoria}</h2>`;
+        productos.filter(p => p.categoria === categoria).forEach(p => {
+            contenedor.innerHTML += `
+                <div class="producto-card">
+                    <div class="info-prod">
+                        <h3>${p.nombre}</h3>
+                        <p>${p.desc}</p>
+                        <strong>₡${p.precio}</strong>
+                    </div>
+                    <button class="btn-add" onclick="agregar(${p.id})">+</button>
+                </div>`;
+        });
+    });
 }
 
-/* --- ANIMACIÓN PARA EL TÍTULO (Efecto Pulso) --- */
-@keyframes pulso-texto {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); } /* Crece un poquito */
-  100% { transform: scale(1); }
+function agregar(id) {
+    const prod = productos.find(p => p.id === id);
+    carrito.push({...prod});
+    actualizarCarrito();
 }
 
-body {
-  background-color: var(--fondo-rojo); /* TODO EL FONDO ROJO */
-  color: var(--color-principal); /* LETRAS BLANCAS */
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  margin: 0;
-  padding: 15px;
-  -webkit-font-smoothing: antialiased;
+function actualizarCarrito() {
+    const lista = document.getElementById('lista-carrito');
+    const totalElemento = document.getElementById('total-precio');
+    lista.innerHTML = "";
+    let total = 0;
+
+    carrito.forEach((p, index) => {
+        total += p.precio;
+        lista.innerHTML += `
+            <div class="item-pedido">
+                <span>✅ ${p.nombre} - ₡${p.precio}</span>
+                <button class="btn-x" onclick="eliminarProducto(${index})">✕</button>
+            </div>`;
+    });
+    totalElemento.innerText = `₡${total}`;
 }
 
-header {
-  text-align: center;
-  padding: 25px 0;
-  margin-bottom: 25px;
-  border-bottom: 2px solid #fff; /* Línea blanca abajo */
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2); /* Sutil brillo blanco */
+function eliminarProducto(index) {
+    carrito.splice(index, 1);
+    actualizarCarrito();
 }
 
-/* --- ESTILO DEL TÍTULO SIN NEON Y CON MOVIMIENTO --- */
-header h1 {
-  color: #ffffff; /* Blanco nítido */
-  font-weight: bold;
-  font-size: 2.2em;
-  margin: 0;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Sombra suave para nítidez */
-  
-  /* APLICAR LA ANIMACIÓN AQUÍ */
-  animation-name: pulso-texto;
-  animation-duration: 2s; /* Duración de cada ciclo (2 segundos) */
-  animation-iteration-count: infinite; /* Repetir para siempre */
-  animation-timing-function: ease-in-out; /* Movimiento suave */
-  display: inline-block; /* Necesario para que la animación de escala funcione bien */
+function obtenerUbicacion() {
+    const status = document.getElementById('status-geo');
+    status.innerText = "Localizando...";
+    navigator.geolocation.getCurrentPosition((pos) => {
+        linkMapa = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+        status.innerText = "Ubicación Guardada ✅";
+        document.getElementById('btn-geo').style.background = "#e8f0fe";
+    }, () => {
+        status.innerText = "❌ Error de GPS";
+    });
 }
 
-header p {
-  color: #fff; /* Letras blancas para el subtítulo */
-  margin-top: 5px;
-  font-size: 1em;
+function enviarPedido() {
+    if (carrito.length === 0) return alert("Agrega productos primero");
+    let mensaje = "🛍️ *Nuevo Pedido - Onde los Pasteles*\n\n";
+    carrito.forEach(p => mensaje += `- ${p.nombre} (₡${p.precio})\n`);
+    mensaje += `\n*Total: ${document.getElementById('total-precio').innerText}*`;
+    if (linkMapa !== "") mensaje += `\n\n📍 *Ubicación:* ${linkMapa}`;
+    window.open(`https://wa.me/50671571325?text=${encodeURIComponent(mensaje)}`);
 }
 
-#menu-container {
-  display: grid;
-  gap: 15px;
-}
-
-.producto-card {
-  background: var(--fondo-tarjeta); /* Fondo rojo un poco más oscuro */
-  border: 1px solid var(--borde-tarjeta);
-  border-radius: 15px;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra oscura para dar relieve */
-}
-
-.info-prod h3 { 
-  margin: 0; 
-  color: #ffffff; /* Nombres de productos en blanco */
-  font-size: 1.25em;
-  font-weight: bold;
-}
-
-.info-prod p { 
-  margin: 5px 0; 
-  font-size: 0.95em; 
-  color: var(--color-secundario); /* Descripciones en blanco suave */
-}
-
-.info-prod strong {
-  display: block;
-  font-size: 1.3em;
-  color: #ffffff; /* Precios en blanco nítido */
-  margin-top: 5px;
-  font-weight: bold;
-}
-
-.btn-add {
-  background-color: #ffffff; /* BOTÓN BLANCO */
-  color: var(--fondo-rojo); /* SÍMBOLO '+' EN ROJO */
-  border: none;
-  padding: 12px 18px;
-  border-radius: 10px;
-  font-size: 1.2em;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.btn-add:active {
-  background-color: #f0f0f0;
-}
-
-#carrito-seccion {
-  background: rgba(255, 255, 255, 0.1); /* Un fondo blanco muy transparente */
-  border: 1px solid #fff; /* Borde blanco nítido */
-  border-radius: 15px;
-  padding: 20px;
-  margin-top: 30px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); /* Brillo blanco */
-}
-
-#carrito-seccion h2 {
-    color: #ffffff;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 0;
-}
-
-.total-contenedor {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.3em;
-  font-weight: bold;
-  margin: 15px 0;
-  color: #ffffff;
-}
-
-.ubicacion-bloque {
-  background: rgba(255, 255, 255, 0.15); /* Más contraste para el bloque */
-  padding: 15px;
-  border-radius: 12px;
-  margin: 20px 0;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-#btn-geo {
-  background: #ffffff; /* BOTÓN BLANCO */
-  color: #1f6feb; /* Texto en azul original */
-  border: none;
-  padding: 15px;
-  border-radius: 10px;
-  width: 100%;
-  font-size: 1.1em;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-#status-geo {
-  margin-top: 10px;
-  font-size: 0.95em;
-  color: #ffffff; /* Texto blanco */
-}
-
-#btn-enviar {
-  background: #238636; /* Verde WhatsApp (lo mantenemos para reconocimiento) */
-  color: white;
-  border: none;
-  padding: 18px;
-  border-radius: 15px;
-  width: 100%;
-  font-size: 1.2em;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 6px 15px rgba(35, 134, 54, 0.5); /* Brillo verde */
-}
-
-#btn-enviar:active {
-  background-color: #1e6b2c;
-}
-
-/* --- FIN DEL CÓDIGO --- */
-
-/* --- ESTILOS Y ANIMACIÓN PARA LAS CATEGORÍAS --- */
-@keyframes flotar-categoria {
-  0% { transform: translateX(-4px); }
-  50% { transform: translateX(4px); }
-  100% { transform: translateX(-4px); }
-}
-
-.titulo-categoria {
-  color: #ffffff;
-  font-size: 1.8em;
-  text-transform: uppercase;
-  margin-top: 40px;
-  margin-bottom: 15px;
-  padding-bottom: 5px;
-  border-bottom: 2px dashed rgba(255, 255, 255, 0.4);
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-  text-align: left;
-  
-  /* Animación de movimiento */
-  animation: flotar-categoria 4s ease-in-out infinite;
-}
+mostrarMenu();
