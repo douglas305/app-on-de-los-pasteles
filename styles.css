@@ -1,33 +1,71 @@
 body {
-    font-family: Arial, sans-serif;
+    background-color: #0d1117;
+    color: #e6edf3;
+    font-family: 'Segoe UI', sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-}
-
-header {
-    background-color: #d32f2f;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
-
-.producto {
-    background: white;
-    margin: 10px;
     padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.neon-text {
+    color: #fff;
+    text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
+    text-align: center;
+}
+
+.neon-text-blue {
+    color: #fff;
+    text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+}
+
+.producto-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.15);
 }
 
-button {
-    background-color: #4CAF50;
+.info-prod h3 { margin: 0; color: #58a6ff; }
+.info-prod p { margin: 5px 0; font-size: 0.9em; color: #8b949e; }
+
+.btn-add {
+    background: #8a2be2;
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.ubicacion-bloque {
+    background: #21262d;
+    padding: 15px;
+    border-radius: 12px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+#btn-geo {
+    background: #1f6feb;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+#btn-enviar {
+    background: #238636;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    width: 100%;
+    font-size: 1.1em;
+    font-weight: bold;
     cursor: pointer;
 }
