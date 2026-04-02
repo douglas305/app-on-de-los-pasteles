@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nombre": "Empanada Gigante",
+    "precio": 1500,
+    "categoria": "Comida"
+  },
+  {
+    "id": 2,
+    "nombre": "Vigorón Mixto",
+    "precio": 2500,
+    "categoria": "Comida"
+  },
+  {
+    "id": 3,
+    "nombre": "Enyucado",
+    "precio": 1200,
+    "categoria": "Comida"
+  },
+  {
+    "id": 4,
+    "nombre": "Refresco Natural",
+    "precio": 1000,
+    "categoria": "Bebidas"
+  }
+]
