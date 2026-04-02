@@ -42,8 +42,8 @@ const productos = [
     { id: 28, categoria: "Café", nombre: "Café con Leche", precio: 900, desc: "Calientito" },
 
     // --- CATEGORÍA: PROMOCIONES ---
-    { id: 29, categoria: "Promociones (Después de 1pm)", nombre: "2x Empanadas", precio: 1500, desc: "Aplica en empanadas seleccionadas" },
-    { id: 30, categoria: "Promociones (Después de 1pm)", nombre: "2x Pasteles", precio: 1500, desc: "Aplica en pasteles seleccionados" }
+    { id: 29, categoria: "Promociones (Después de 1pm)", nombre: "2x Empanadas", precio: 1500, desc: "Aplica en seleccionadas" },
+    { id: 30, categoria: "Promociones (Después de 1pm)", nombre: "2x Pasteles", precio: 1500, desc: "Aplica en seleccionados" }
 ];
 
 let carrito = [];
@@ -51,16 +51,13 @@ let linkMapa = "";
 
 function mostrarMenu() {
     const contenedor = document.getElementById('menu-container');
-    contenedor.innerHTML = ""; // Limpiar antes de cargar
+    if(!contenedor) return;
+    contenedor.innerHTML = "";
 
-    // Extraer las categorías únicas
     const categorias = [...new Set(productos.map(p => p.categoria))];
 
     categorias.forEach(categoria => {
-        // Título de la categoría con la clase para la animación
         contenedor.innerHTML += `<h2 class="titulo-categoria">${categoria}</h2>`;
-        
-        // Filtrar productos de esta categoría
         const prods = productos.filter(p => p.categoria === categoria);
         
         prods.forEach(p => {
@@ -86,14 +83,24 @@ function agregar(id) {
 function actualizarCarrito() {
     const lista = document.getElementById('lista-carrito');
     const totalElemento = document.getElementById('total-precio');
+    if(!lista || !totalElemento) return;
     lista.innerHTML = "";
     let total = 0;
 
     carrito.forEach((p, index) => {
         total += p.precio;
-        lista.innerHTML += `<p>✅ ${p.nombre} - ₡${p.precio}</p>`;
+        lista.innerHTML += `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 8px;">
+                <span style="color: white;">✅ ${p.nombre} - ₡${p.precio}</span>
+                <button onclick="eliminarProducto(${index})" style="background: #ff4d4d; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-weight: bold;">X</button>
+            </div>`;
     });
     totalElemento.innerText = `₡${total}`;
+}
+
+function eliminarProducto(index) {
+    carrito.splice(index, 1);
+    actualizarCarrito();
 }
 
 function obtenerUbicacion() {
@@ -106,6 +113,8 @@ function obtenerUbicacion() {
             linkMapa = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
             status.innerText = "✅ Ubicación guardada";
             document.getElementById('btn-geo').style.background = "#238636";
+        }, () => {
+            status.innerText = "❌ Error al obtener ubicación";
         });
     }
 }
@@ -121,7 +130,7 @@ function enviarPedido() {
         mensaje += `\n\n📍 *Ubicación de entrega:* ${linkMapa}`;
     }
 
-    const tel = "50671571325"; // TU NÚMERO
+    const tel = "50671571325"; 
     window.open(`https://wa.me/${tel}?text=${encodeURIComponent(mensaje)}`);
 }
 
