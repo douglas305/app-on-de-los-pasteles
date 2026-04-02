@@ -3,39 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onde los Pasteles - Pedidos</title>
+    <title>Onde los Pasteles</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <header style="text-align: center; padding: 20px;">
-        <h1>Onde los Pasteles</h1>
-        <p>¡El sabor que te encanta!</p>
-    </header>
-
     <main id="menu-container"></main>
 
-    <section class="carrito-flotante">
-        <div class="resumen-pedido">
+    <section class="seccion-pedido">
+        <div class="contenedor-blanco-borde">
             <h2>Tu Pedido</h2>
             
-            <div id="lista-carrito"></div>
+            <div id="lista-carrito">
+                </div>
 
-            <hr>
             <div class="fila-total">
                 <span>Total:</span>
                 <span id="total-precio">₡0</span>
             </div>
 
-            <div class="acciones">
-                <button id="btn-geo" onclick="obtenerUbicacion()">
-                    <span id="status-geo">📍 Compartir mi Ubicación</span>
+            <div class="tarjeta-ubicacion">
+                <button id="btn-geo" onclick="obtenerUbicacion()" class="btn-blanco-geo">
+                    <span style="color: #007bff; font-size: 1.2em;">📍</span> 
+                    <span id="status-geo" style="color: #007bff;">Compartir mi Ubicación</span>
                 </button>
-                
-                <button class="btn-enviar" onclick="enviarPedido()">
-                    ✅ Enviar por WhatsApp
-                </button>
+                <p class="texto-requerido">Requerido para entregas a domicilio</p>
             </div>
+
+            <button class="btn-enviar-wa" onclick="enviarPedido()">
+                ✅ Enviar Pedido por WhatsApp
+            </button>
         </div>
     </section>
 
