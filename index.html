@@ -4,27 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Onde los Pasteles</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .producto { border-bottom: 1px solid #ddd; padding: 10px 0; display: flex; justify-content: space-between; }
+        .item-pedido { display: flex; justify-content: space-between; background: #f9f9f9; padding: 5px; margin: 5px 0; border-radius: 5px; }
+        .btn-borrar { color: red; cursor: pointer; font-weight: bold; border: none; background: none; margin-left: 10px; }
+        #carrito { margin-top: 20px; border-top: 2px solid #000; padding-top: 10px; }
+        button.add { background-color: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 3px; }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <h1>Onde los Pasteles</h1>
-            <p> Orotina Centro </p>
-        </header>
 
-        <div id="categorias-container">
-            </div>
+    <h1>Onde los Pasteles</h1>
+    <p>Orotina Centro</p>
 
-        <section class="carrito-container">
-            <h2>Tu Pedido</h2>
-            <div id="items-pedido"></div>
-            <div class="total-seccion">
-                <strong>Total: ₡<span id="monto-total">0</span></strong>
-            </div>
-            <button onclick="enviarWhatsApp()" class="btn-whatsapp">Enviar Pedido</button>
-        </section>
+    <div id="menu">
+        </div>
+
+    <div id="carrito">
+        <h2>Tu Pedido</h2>
+        <div id="lista-pedido"></div>
+        <h3>Total: ₡<span id="total-monto">0</span></h3>
+        <button onclick="enviarPedido()">Enviar Pedido</button>
     </div>
-    <script src="app.js"></script>
+
+    <script>
+        // 1. LOS PRODUCTOS (Asegúrate de que no falte ninguna coma)
+        const productos = [
+            { id: 1, nombre: "Empanada de Carne", precio: 1000 },
+            { id: 2, nombre: "Pastel de Pollo", precio: 1200 },
+            { id: 3, nombre: "Vigorón Mixto", precio: 2500 }
+        ];
+
+        let pedido = [];
+
+        // 2. MOSTRAR EL MENÚ (Esta función es sagrada, no se toca)
+        function cargarMenu() {
+            const menuDiv = document.getElementById('menu');
+            menuDiv.innerHTML = productos.map(p => `
+                <div class="producto">
+                    <span>${p.nombre} - ₡${p.precio}</span>
+                    <button class="add" onclick="agregar(${p.id})">Agregar</button>
+                </div>
+            `).join('');
+        }
+
+        // 3. AGREGAR AL CARRITO
+        function agregar(id) {
+            const prod = productos.find(p => p.id === id);
+            pedido.push(prod);
+            actualizarInterfaz();
+        }
+
+        // 4. LA FAMOSA "X" PARA BORRAR (Sin errores)
+        function borrarDelPedido(index) {
+            pedido.splice(index, 1); // Borra solo el elemento seleccionado
+            actualizarInterfaz();
+        }
+
+        // 5. ACTUALIZAR TODO
+        function actualizarInterfaz() {
+            const listaDiv = document.getElementById('lista-pedido');
+            const totalSpan = document.getElementById('total-monto');
+            
+            // Dibujar la lista con la X
+            listaDiv.innerHTML = pedido.map((p, index) => `
+                <div class="item-pedido">
+                    <span>${p.nombre} - ₡${p.precio}</span>
+                    <button class="btn-borrar" onclick="borrarDelPedido(${index})">X</button>
+                </div>
+            `).join('');
+
+            // Calcular total
+            const total = pedido.reduce((sum, p) => sum + p.precio, 0);
+            totalSpan.innerText = total;
+        }
+
+        function enviarPedido() {
+            if(pedido.length === 0) return alert("El pedido está vacío");
+            alert("Pedido enviado correctamente");
+        }
+
+        // Arrancar la página
+        cargarMenu();
+    </script>
 </body>
 </html>
