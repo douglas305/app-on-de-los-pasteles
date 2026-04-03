@@ -4,38 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Onde los Pasteles</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="app-container">
+        <header>
+            <h1>Onde los Pasteles</h1>
+            <p> Orotina Centro </p>
+        </header>
 
-    <main id="menu-container"></main>
+        <div id="categorias-container">
+            </div>
 
-    <section class="seccion-pedido">
-        <div class="contenedor-blanco-borde">
+        <section class="carrito-container">
             <h2>Tu Pedido</h2>
-            
-            <div id="lista-carrito">
-                </div>
-
-            <div class="fila-total">
-                <span>Total:</span>
-                <span id="total-precio">₡0</span>
+            <div id="items-pedido"></div>
+            <div class="total-seccion">
+                <strong>Total: ₡<span id="monto-total">0</span></strong>
             </div>
-
-            <div class="tarjeta-ubicacion">
-                <button id="btn-geo" onclick="obtenerUbicacion()" class="btn-blanco-geo">
-                    <span style="color: #007bff; font-size: 1.2em;">📍</span> 
-                    <span id="status-geo" style="color: #007bff;">Compartir mi Ubicación</span>
-                </button>
-                <p class="texto-requerido">Requerido para entregas a domicilio</p>
-            </div>
-
-            <button class="btn-enviar-wa" onclick="enviarPedido()">
-                ✅ Enviar Pedido por WhatsApp
-            </button>
-        </div>
-    </section>
-
+            <button onclick="enviarWhatsApp()" class="btn-whatsapp">Enviar Pedido</button>
+        </section>
+    </div>
     <script src="app.js"></script>
 </body>
 </html>
