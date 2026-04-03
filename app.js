@@ -1,65 +1,61 @@
-// 1. TU LISTA ORIGINAL DE PRODUCTOS
-const productos = [
-    { id: 1, nombre: "Pastel de Pollo", precio: 1000, categoria: "Pasteles" },
-    { id: 2, nombre: "Pastel de Carne", precio: 1000, categoria: "Pasteles" },
-    { id: 3, nombre: "Empanada de Queso", precio: 800, categoria: "Empanadas" },
-    { id: 4, nombre: "Empanada de Frijol", precio: 800, categoria: "Empanadas" },
-    { id: 5, nombre: "Pollo Frito (Pieza)", precio: 1200, categoria: "Pollo" },
-    { id: 6, nombre: "Vigorón Mixto", precio: 2500, categoria: "Especiales" }
-    // Aquí puedes seguir pegando el resto de tus productos exactamente igual
+const menu = [
+    { id: 1, categoria: "PASTELES", nombre: "Pastel de Pizza", desc: "Sabor tradicional pizza", precio: 1000 },
+    { id: 2, categoria: "PASTELES", nombre: "Pastel Nacho", desc: "Sabor nacho especial", precio: 1000 },
+    { id: 3, categoria: "PASTELES", nombre: "Pastel Pollo", desc: "Pollo mechado premium", precio: 1000 },
+    { id: 4, categoria: "EMPANADAS", nombre: "Empanada de Queso", desc: "Queso tico fresco", precio: 800 }
 ];
 
-let carrito = [];
+let pedido = [];
 
-// 2. FUNCIÓN PARA AGREGAR (SIN CAMBIOS)
-function agregarAlCarrito(id) {
-    const producto = productos.find(p => p.id === id);
-    carrito.push(producto);
-    renderizarCarrito();
-}
+function cargarMenu() {
+    const container = document.getElementById('categorias-container');
+    const categorias = [...new Set(menu.map(p => p.categoria))];
 
-// 3. LA FUNCIÓN DE LA "X" (PARA BORRAR SIN ARRUINAR EL RESTO)
-function eliminarDelCarrito(index) {
-    // Elimina solo el elemento seleccionado por su posición
-    carrito.splice(index, 1);
-    renderizarCarrito();
-}
-
-// 4. RENDERIZADO DEL CARRITO CON EL BOTÓN DE BORRADO
-function renderizarCarrito() {
-    const listaCarrito = document.getElementById('lista-carrito');
-    const totalElemento = document.getElementById('total');
-    let total = 0;
-    
-    listaCarrito.innerHTML = ''; // Limpiar antes de mostrar
-
-    carrito.forEach((item, index) => {
-        total += item.precio;
-        const div = document.createElement('div');
-        div.className = 'item-carrito';
-        div.innerHTML = `
-            <span>${item.nombre} - ₡${item.precio}</span>
-            <button onclick="eliminarDelCarrito(${index})" class="btn-borrar">X</button>
-        `;
-        listaCarrito.appendChild(div);
+    container.innerHTML = '';
+    categorias.forEach(cat => {
+        let html = `<h2 class="categoria-titulo">${cat}</h2>`;
+        menu.filter(p => p.categoria === cat).forEach(prod => {
+            html += `
+                <div class="producto-card">
+                    <div class="info-prod">
+                        <h3>${prod.nombre}</h3>
+                        <p>${prod.desc}</p>
+                        <span class="precio">₡${prod.precio}</span>
+                    </div>
+                    <button class="btn-mas" onclick="agregar(${prod.id})">+</button>
+                </div>`;
+        });
+        container.innerHTML += html;
     });
-
-    totalElemento.innerText = total;
 }
 
-// 5. FUNCIÓN PARA EL PEDIDO (ESTRUCTURA JSON PARA MANYCHAT)
-function enviarPedido() {
-    if (carrito.length === 0) {
-        alert("El carrito está vacío");
-        return;
-    }
-
-    const pedidoData = {
-        productos: carrito.map(i => i.nombre),
-        total: carrito.reduce((sum, i) => sum + i.precio, 0),
-        fecha: new Date().toLocaleString()
-    };
-
-    console.log("Datos para ManyChat:", JSON.stringify(pedidoData));
-    alert("Pedido listo para procesar");
+function agregar(id) {
+    const p = menu.find(prod => prod.id === id);
+    pedido.push({...p});
+    actualizarCarrito();
 }
+
+// ESTA ES LA FUNCIÓN QUE BORRA CON LA "X"
+function borrarItem(index) {
+    pedido.splice(index, 1);
+    actualizarCarrito();
+}
+
+function actualizarCarrito() {
+    const lista = document.getElementById('items-pedido');
+    const totalSpan = document.getElementById('monto-total');
+    let total = 0;
+
+    lista.innerHTML = '';
+    pedido.forEach((item, index) => {
+        total += item.precio;
+        lista.innerHTML += `
+            <div class="item-carrito">
+                <span>✅ ${item.nombre}</span>
+                <span>₡${item.precio} <button class="btn-borrar" onclick="borrarItem(${index})">X</button></span>
+            </div>`;
+    });
+    totalSpan.innerText = total;
+}
+
+window.onload = cargarMenu;
