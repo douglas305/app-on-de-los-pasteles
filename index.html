@@ -178,7 +178,7 @@ function mostrarMenu() {
     const categorias = [...new Set(productos.map(p => p.categoria))];
 
     categorias.forEach(categoria => {
-        contenedor.innerHTML += `<h2 class="titulo-categoria" style="color: black !important;>${categoria}</h2>`;
+        contenedor.innerHTML += `<h2 class="titulo-categoria" style="color: black !important;">${categoria}</h2>`;
         const prods = productos.filter(p => p.categoria === categoria);
         prods.forEach(p => {
             contenedor.innerHTML += `
