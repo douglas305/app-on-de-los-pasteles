@@ -3,41 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onde los Pasteles - Orotina</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Onde los Pasteles</title>
+    <style>
+        :root {
+            --fondo-rojo: #cc0000;
+            --fondo-tarjeta: #b30000;
+            --letras: #ffffff;
+        }
+        body { background-color: var(--fondo-rojo); color: var(--letras); font-family: Arial, sans-serif; padding: 20px; margin: 0; }
+        h1 { text-align: center; margin-bottom: 5px; }
+        .subtitulo { text-align: center; margin-bottom: 20px; font-style: italic; }
+        .categoria-titulo { border-bottom: 2px solid white; margin-top: 25px; padding-bottom: 5px; text-transform: uppercase; }
+        .producto-card { background: var(--fondo-tarjeta); border: 1px solid #a00000; padding: 15px; margin: 10px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-add { background: white; color: var(--fondo-rojo); border: none; width: 35px; height: 35px; border-radius: 50%; font-weight: bold; font-size: 20px; cursor: pointer; }
+        #carrito-seccion { margin-top: 40px; border-top: 2px solid white; padding-top: 20px; }
+        .item-pedido { display: flex; justify-content: space-between; background: rgba(255,255,255,0.1); padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .btn-x { background: none; border: 1px solid white; color: white; cursor: pointer; padding: 2px 8px; border-radius: 3px; }
+        .btn-gps { width: 100%; padding: 12px; margin: 10px 0; background: #555; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-whatsapp { width: 100%; padding: 15px; background: #25d366; color: white; border: none; border-radius: 5px; font-weight: bold; font-size: 16px; cursor: pointer; }
+    </style>
 </head>
 <body>
-    <header>
-        <h1 class="neon-text">Onde los Pasteles</h1>
-        <p>¡Sabor auténtico en Orotina!</p>
-    </header>
 
-    <main>
-        <section id="menu-container">
-            </section>
+    <h1>Onde los Pasteles</h1>
+    <p class="subtitulo">¡Sabor auténtico en Orotina!</p>
 
-        <section id="carrito-seccion">
-            <h2 class="neon-text-blue">Tu Pedido</h2>
-            <div id="lista-carrito"></div>
-            <div class="total-contenedor">
-                <span>Total:</span>
-                <span id="total-precio">₡0</span>
-            </div>
-            
-            <div class="ubicacion-bloque">
-                <button id="btn-geo" onclick="obtenerUbicacion()">
-                    <i class="fas fa-map-marker-alt"></i> Compartir mi Ubicación
-                </button>
-                <p id="status-geo">Requerido para entregas a domicilio</p>
-            </div>
+    <div id="contenedor-menu"></div>
 
-            <button id="btn-enviar" onclick="enviarPedido()">
-                <i class="fab fa-whatsapp"></i> Enviar Pedido por WhatsApp
-            </button>
-        </section>
-    </main>
+    <div id="carrito-seccion">
+        <h2>Tu Pedido</h2>
+        <div id="lista-pedido"></div>
+        <h3 style="text-align: right;">Total: <span id="monto-total">₡0</span></h3>
+        
+        <button class="btn-gps" onclick="obtenerUbicacion()" id="btn-geo">📍 Compartir mi Ubicación</button>
+        <p id="status-geo" style="text-align: center; font-size: 12px;"></p>
+        
+        <button class="btn-whatsapp" onclick="enviarPedido()">🛒 Enviar Pedido por WhatsApp</button>
+    </div>
 
-    <script src="app.js"></script>
+<script>
+    const productos = [
+        { id: 1, categoria: "Pasteles", nombre: "Pastel de Pizza", precio: 1000, desc: "Sabor tradicional pizza" },
+        { id: 2, categoria: "Pasteles", nombre: "Pastel Nacho", precio: 1000, desc: "Sabor nacho especial" },
+        { id: 3, categoria: "Pasteles", nombre: "Pastel Arreglado", precio: 1500, desc: "Con ensalada y salsas" },
+        { id: 4, categoria: "Pasteles", nombre: "Pastel Papa con Carne", precio: 1000, desc: "Relleno tradicional" },
+        { id: 5, categoria: "Empanadas", nombre: "Empanada Papa con Carne", precio: 1000, desc: "Crujiente y calientita" },
+        { id: 29, categoria: "Promociones", nombre: "2x Empanadas", precio: 1500, desc: "Aplica en seleccionadas" },
+        { id: 30, categoria: "Promociones", nombre: "2x Pasteles", precio: 1500, desc: "Aplica en seleccionados" }
+    ];
+
+    let pedido = [];
+    let linkMapa = "";
+
+    function mostrarMenu() {
+        const divMenu = document.getElementById('contenedor-menu');
+        divMenu.innerHTML = "";
+        const cats = [...new Set(productos.map(p => p.categoria))];
+
+        cats.forEach(c => {
+            divMenu.innerHTML += `<h2 class="categoria-titulo">${c}</h2>`;
+            productos.filter(p => p.categoria === c).forEach(p => {
+                divMenu.innerHTML += `
+                    <div class="producto-card">
+                        <div>
+                            <strong>${p.nombre}</strong><br>
+                            <small>${p.desc}</small><br>
+                            <span>₡${p.precio}</span>
+                        </div>
+                        <button class="btn-add" onclick="agregar(${p.id})">+</button>
+                    </div>`;
+            });
+        });
+    }
+
+    function agregar(id) {
+        const prod = productos.find(p => p.id === id);
+        pedido.push({...prod});
+        actualizarVista();
+    }
+
+    function borrarItem(index) {
+        pedido.splice(index, 1);
+        actualizarVista();
+    }
+
+    function actualizarVista() {
+        const lista = document.getElementById('lista-pedido');
+        const totalTxt = document.getElementById('monto-total');
+        lista.innerHTML = "";
+        let total = 0;
+
+        pedido.forEach((p, i) => {
+            total += p.precio;
+            lista.innerHTML += `
+                <div class="item-pedido">
+                    <span>${p.nombre} (₡${p.precio})</span>
+                    <button class="btn-x" onclick="borrarItem(${i})">✕</button>
+                </div>`;
+        });
+        totalTxt.innerText = "₡" + total;
+    }
+
+    function obtenerUbicacion() {
+        const status = document.getElementById('status-geo');
+        if (!navigator.geolocation) return status.innerText = "GPS no soportado";
+        status.innerText = "Localizando...";
+        navigator.geolocation.getCurrentPosition((pos) => {
+            linkMapa = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            status.innerText = "✅ Ubicación guardada";
+            document.getElementById('btn-geo').style.background = "#28a745";
+        });
+    }
+
+    function enviarPedido() {
+        if (pedido.length === 0) return alert("Pedido vacío");
+        let txt = "🛍️ *Nuevo Pedido*\n\n";
+        pedido.forEach(p => txt += `- ${p.nombre} (₡${p.precio})\n`);
+        txt += `\n*Total: ${document.getElementById('monto-total').innerText}*`;
+        if (linkMapa !== "") txt += `\n\n📍 *Entrega:* ${linkMapa}`;
+        window.open(`https://wa.me/50671571325?text=${encodeURIComponent(txt)}`);
+    }
+
+    mostrarMenu();
+</script>
 </body>
 </html>
